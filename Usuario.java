@@ -22,7 +22,24 @@ public abstract class Usuario {
         usuario.estaBloqueado = false;
     }
 
-    public Puntos getPuntos(Zona zona) {
-        return puntos;
+    public int getPuntos(Zona zona){
+        int puntosZona = 0;
+        for (int i = 0; i < puntos.size() ; i++) {
+            if(puntos.get(i).getZona() == zona){
+                puntosZona = puntos.get(i).getPuntosTotales();
+            }
+        }
+        return puntosZona;
     }
+
+    public String getAlias() {
+        return Alias;
+    }
+
+    public void agregarZonaDePuntos(Zona zona){
+        puntos.add(new Puntos(zona));
+    }
+
+
+
 }

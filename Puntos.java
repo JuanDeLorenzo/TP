@@ -1,12 +1,18 @@
 package prog2.TP;
 
 public class Puntos {
-    Zona lugar;
+    Zona zona;
     int puntosUsados;
     int puntosTotales;
 
-    public Zona getLugar() {
-        return lugar;
+    public Puntos(Zona zona){
+        this.zona = zona;
+        this.puntosUsados = 0;
+        this.puntosTotales = 0;
+    }
+
+    public Zona getZona() {
+        return zona;
     }
 
     public int getPuntosUsados() {

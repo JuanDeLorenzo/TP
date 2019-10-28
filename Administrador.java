@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Administrador extends Usuario{
     ArrayList<Activo> activos;
 
-    public Administrador(int telefono) {
-        super(telefono);
+    public Administrador(int telefono, String alias) {
+        super(telefono,alias);
     }
 
     public void MultarUsuario(Usuario usuario){
@@ -18,3 +18,4 @@ public class Administrador extends Usuario{
 
 
 }
+

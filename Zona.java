@@ -7,5 +7,6 @@ public class Zona {
     public Zona(String lugar, int valorZona){
         this.lugar = lugar;
         this.valorZona = valorZona;
+
     }
 }
