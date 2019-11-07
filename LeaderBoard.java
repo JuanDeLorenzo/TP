@@ -2,6 +2,12 @@ package prog2.TP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class LeaderBoard {
     Zona zona;
@@ -36,4 +42,28 @@ public class LeaderBoard {
         }
         return top10;
     }
+    
+    public void borrarDespuesde1mes(ArrayList<Usuario> usuarios){
+        Timer timer = new Timer();
+
+
+
+            TimerTask timerTask  = new TimerTask() {
+                @Override
+                public void run() {
+                    int dayOfMonth = LocalDate.now().getDayOfMonth();
+                    if (dayOfMonth == 1) {
+
+                        tabla.clear();
+                        for (int i = 0; i < 9; i++) {
+                            tabla(usuarios.get(i).getAlias(), 0);
+                        }
+                    }
+                }
+                };
+            LocalDateTime of = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(7, 0));
+            Date from = Date.from(of.atZone(ZoneId.systemDefault()).toInstant());
+
+            timer.scheduleAtFixedRate(timerTask, from, TimeUnit.DAYS.toMillis(1));
+            }
 }
