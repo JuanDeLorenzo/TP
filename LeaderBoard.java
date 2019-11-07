@@ -29,4 +29,11 @@ public class LeaderBoard {
     public void printLeaderBoard(){
 
     }
+    public HashMap<String, Integer> top10 (ArrayList<Usuario> usuarios){   // se usaria despues de ordenarPuntaje.
+        HashMap<Usuario, Integer> top10 = new HashMap<>();
+        for(int i = 0; i < 10; i++){
+            top10.put(usuarios.get(i).getAlias(), tabla.get(usuarios.get(i)));
+        }
+        return top10;
+    }
 }
