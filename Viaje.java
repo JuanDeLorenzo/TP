@@ -16,7 +16,7 @@ public class Viaje {
     private Descuento descuentoUtilizado;
 
 
-    public Viaje(Activo activoUsado, Date tiempoDeEntregaPorElUsuario ) {
+    public Viaje(Activo activoUsado, Date tiempoDeEntregaPorElUsuario) {
         this.tiempoDeSalida = new Date();
         this.activoUsado = activoUsado;
         this.terminalDeSalida = activoUsado.getTerminalDeActual();

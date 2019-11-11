@@ -16,7 +16,7 @@ public class MenuCliente {
         String terminalUsuario = scanner.nextLine();
 
         ArrayList<Activo> activosCoincidentes = new ArrayList<>();
-        for (Activo activo: ActivosRepositorio.repositorioActivos) {
+        for (Activo activo: MenuDeInicio.activosRepositorio.listar()) {
             if (zonaUsuario.equals(activo.getZona().getNombreZona()) && terminalUsuario.equals(activo.getTerminalDeActual())) {
                 activosCoincidentes.add(activo);
             }
@@ -43,7 +43,7 @@ public class MenuCliente {
 
             Date fecha = new Date(anoIngresado, mesIngresado, diaIngresado, horaIngresada, minutoIngresado);
 
-            InicioDeSesionCliente.clienteIniciado.iniciarViaje(ActivosRepositorio.repositorioActivos.get(activoSeleccionado), fecha);
+            InicioDeSesionCliente.clienteIniciado.iniciarViaje(MenuDeInicio.activosRepositorio.listar().get(activoSeleccionado), fecha);
         }
     }
 
@@ -59,13 +59,17 @@ public class MenuCliente {
 
     public void verTablaDePuntajes(){
         System.out.println("Seleccione zona");
-        for (int i = 0; i < ZonasRepositorio.repositorioZonas.size() ; i++) {
-            System.out.println(++i + ") " + ZonasRepositorio.repositorioZonas.get(i).getNombreZona());
+        if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
+            System.out.println("No hay zonas en el sistema");
+            return;
+        }
+        for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size() ; i++) {
+            System.out.println(++i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
         int zonaSeleccionada = scanner.nextInt();
 
         for (TablaDePuntaje tablaDePuntaje: MenuDeInicio.tablasDePuntaje) {
-            if (ZonasRepositorio.repositorioZonas.get(zonaSeleccionada).equals(tablaDePuntaje.getZona())){
+            if (MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada).equals(tablaDePuntaje.getZona())){
                 tablaDePuntaje.printLeaderBoard();
             }else{
                 System.out.println("No hay tabla de puntaje para la zona seleccionada");
@@ -75,17 +79,25 @@ public class MenuCliente {
 
     public void verPuntosDelUsuario(){
         System.out.println("Seleccione zona");
-        for (int i = 0; i < ZonasRepositorio.repositorioZonas.size() ; i++) {
-            System.out.println(++i + ") " + ZonasRepositorio.repositorioZonas.get(i).getNombreZona());
+        if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
+            System.out.println("No hay zonas en el sistema");
+            return;
+        }
+        for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size() ; i++) {
+            System.out.println(++i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
         int zonaSeleccionada = scanner.nextInt();
-        Puntos puntosDelUsuario = InicioDeSesionCliente.clienteIniciado.getPuntos(ZonasRepositorio.repositorioZonas.get(zonaSeleccionada));
+        Puntos puntosDelUsuario = InicioDeSesionCliente.clienteIniciado.getPuntos(MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada));
         System.out.println("Puntos Totales: " + puntosDelUsuario.getPuntosTotales());
         System.out.println("Puntos para Descuento: " + puntosDelUsuario.getPuntosParaDescuento());
     }
 
     public void verFacturasDelUsuario(){
         System.out.println("Seleccione factura");
+        if (InicioDeSesionCliente.clienteIniciado.getFacturas().size() == 0){
+            System.out.println("No tenes facturas");
+            return;
+        }
         for (int i = 0; i < InicioDeSesionCliente.clienteIniciado.getFacturas().size() ; i++) {
             System.out.println(++i + ") Tipo de factura : " + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getTipoDeFactura() + "\n" +
                     "Fecha de la factura : " + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getFechaDelViaje().getDay() + "/" + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getFechaDelViaje().getMonth() + "/" + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getFechaDelViaje().getYear());

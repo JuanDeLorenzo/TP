@@ -75,6 +75,7 @@ public abstract class Usuario {
         }
     }
 
+
     public void darCuponDelMes() {
         cuponDelMes = true;
     }

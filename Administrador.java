@@ -19,6 +19,9 @@ public class Administrador extends Usuario{
     public void multarUsuario(Cliente usuario, int valorDeLaMulta){
         usuario.agregarFactura(new Factura(valorDeLaMulta));
         bloquearUsuario(usuario);
+        for (Puntos puntos:usuario.getPuntosDelUsuario()) {
+            puntos.resetearPuntos();
+        }
     }
 
     public LoteDeCompra crearLoteDeCompra(TipoDeActivo tipoDeActivo, Zona zona, Terminal terminal, int cantidad){

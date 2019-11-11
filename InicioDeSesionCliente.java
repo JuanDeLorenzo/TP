@@ -44,25 +44,27 @@ public class InicioDeSesionCliente {
     public void registrarse(){
         System.out.println("Ingresar numero de telefono : \n");
         int numeroDeTelefono = scanner.nextInt();
-        for (Cliente cliente : MenuDeInicio.clientesRepositorio.listar()) {
-            if (numeroDeTelefono == cliente.getNumeroDeTelefono()){
-                System.out.println("El numero de telefono ya esta asociado a una cuenta");
-                registrarse();
-            }else{
-                System.out.println("Ingresar un nombre : \n");
-                String nombre = scanner.nextLine();
-                System.out.println("Ingresar una contrasena : \n");
-                String contrasena = scanner.nextLine();
-                Cliente clienteNuevo = new Cliente(numeroDeTelefono,nombre,contrasena);
-                MenuDeInicio.clientesRepositorio.agregar(clienteNuevo);
-                setClienteIniciado(clienteNuevo);
-                menuCliente.menuCliente();
+        if (MenuDeInicio.clientesRepositorio.listar().size() == 0){
+            System.out.println("Ingresar un nombre : \n");
+            String nombre = scanner.nextLine();
+            System.out.println("Ingresar una contrasena : \n");
+            String contrasena = scanner.nextLine();
+            Cliente clienteNuevo = new Cliente(numeroDeTelefono,nombre,contrasena);
+            MenuDeInicio.clientesRepositorio.agregar(clienteNuevo);
+            setClienteIniciado(clienteNuevo);
+            menuCliente.menuCliente();
+        }else{
+            for (Cliente cliente : MenuDeInicio.clientesRepositorio.listar()) {
+                if (numeroDeTelefono == cliente.getNumeroDeTelefono()) {
+                    System.out.println("El numero de telefono ya esta asociado a una cuenta");
+                    registrarse();
+                }
             }
-
         }
     }
 
     public static void setClienteIniciado(Cliente clienteIniciado) {
         InicioDeSesionCliente.clienteIniciado = clienteIniciado;
     }
+
 }

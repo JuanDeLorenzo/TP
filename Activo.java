@@ -2,14 +2,14 @@ package prog2.TP;
 
 import java.util.ArrayList;
 
-public abstract class Activo {
+public class Activo {
     private final TipoDeActivo tipoDeActivo;
     private final Zona zona;
     private boolean estaAlquilado;
     private ArrayList<Descuento> descuentos;
     private Viaje viaje;
     private final int id;
-    private int codigoIncremental;
+    private int codigoIncremental = 1;
     private Terminal terminalActual;
     private LoteDeCompra loteDeCompra;
 
