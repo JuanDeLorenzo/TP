@@ -2,18 +2,13 @@ package prog2.TP;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 
 public class MenuCliente {
-    private Scanner scanner = new Scanner(System.in);
 
 
     public void alquilarActivo(){
-        System.out.println("Ingrese zona en la que se encuentra");
-        String zonaUsuario = scanner.nextLine();
-
-        System.out.println("Ingrese terminal en la que se encuentra");
-        String terminalUsuario = scanner.nextLine();
+        String zonaUsuario = Scanner.getString("Ingrese zona en la que se encuentra : ");
+        String terminalUsuario = Scanner.getString("Ingrese terminal en la que se encuentra : ");
 
         ArrayList<Activo> activosCoincidentes = new ArrayList<>();
         for (Activo activo: MenuDeInicio.activosRepositorio.listar()) {
@@ -24,53 +19,41 @@ public class MenuCliente {
         if (activosCoincidentes.size() == 0){
             System.out.println("No hay activos disponibles en tu ubicacion");
         }else{
-            System.out.println("Seleccione activo que desea alquilar");
             for (int i = 0; i < activosCoincidentes.size(); i++) {
                 System.out.println(++i + ") " + activosCoincidentes.get(i).toString());
             }
-            int activoSeleccionado = scanner.nextInt();
+            int activoSeleccionado = Scanner.getInt("Seleccione activo que desea alquilar : ");
 
-            System.out.println("Ingrese año en el cual va a entregar el activo");
-            int anoIngresado = scanner.nextInt();
-            System.out.println("Ingrese mes en el cual va a entregar el activo");
-            int mesIngresado = scanner.nextInt();
-            System.out.println("Ingrese dia en el cual va a entregar el activo");
-            int diaIngresado = scanner.nextInt();
-            System.out.println("Ingrese hora en la cual va a entregar el activo");
-            int horaIngresada = scanner.nextInt();
-            System.out.println("Ingrese minuto en el cual va a entregar el activo");
-            int minutoIngresado = scanner.nextInt();
+            int horaDeEntregaEstimada = Scanner.getInt("Ingresar hora de entrega estimada");
 
-            Date fecha = new Date(anoIngresado, mesIngresado, diaIngresado, horaIngresada, minutoIngresado);
-
-            InicioDeSesionCliente.clienteIniciado.iniciarViaje(MenuDeInicio.activosRepositorio.listar().get(activoSeleccionado), fecha);
+            InicioDeSesionCliente.clienteIniciado.iniciarViaje(MenuDeInicio.activosRepositorio.listar().get(activoSeleccionado), horaDeEntregaEstimada);
         }
     }
 
     public void entregarActivo(){
-        System.out.println("Seleccione terminal de entrega del activo");
         for (int i = 0; i < InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().size() ; i++) {
             System.out.println(++i + ") " + InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(i).getNombre());
         }
-        int terminalSeleccionada = scanner.nextInt();
+        int terminalSeleccionada = Scanner.getInt("Seleccione terminal de entrega del activo : ");
+        int duracionDelViaje = Scanner.getInt("Ingrese duracion del viaje : ");
+        int horaDeEntrega = Scanner.getInt("Ingrese hora en la que esta entregando el activo : ");
 
-        InicioDeSesionCliente.clienteIniciado.entregaActivo(InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(terminalSeleccionada));
+        InicioDeSesionCliente.clienteIniciado.entregaActivo(InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(terminalSeleccionada), duracionDelViaje, horaDeEntrega);
     }
 
     public void verTablaDePuntajes(){
-        System.out.println("Seleccione zona");
         if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
             System.out.println("No hay zonas en el sistema");
             return;
         }
         for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size() ; i++) {
-            System.out.println(++i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
+            System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
-        int zonaSeleccionada = scanner.nextInt();
+        int zonaSeleccionada = Scanner.getInt("Seleccione zona : ");
 
         for (TablaDePuntaje tablaDePuntaje: MenuDeInicio.tablasDePuntaje) {
             if (MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada).equals(tablaDePuntaje.getZona())){
-                tablaDePuntaje.printLeaderBoard();
+                tablaDePuntaje.mostrarTablaDePuntaje();
             }else{
                 System.out.println("No hay tabla de puntaje para la zona seleccionada");
             }
@@ -78,31 +61,29 @@ public class MenuCliente {
     }
 
     public void verPuntosDelUsuario(){
-        System.out.println("Seleccione zona");
         if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
             System.out.println("No hay zonas en el sistema");
             return;
         }
         for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size() ; i++) {
-            System.out.println(++i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
+            System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
-        int zonaSeleccionada = scanner.nextInt();
+        int zonaSeleccionada = Scanner.getInt("Seleccione zona : ");
         Puntos puntosDelUsuario = InicioDeSesionCliente.clienteIniciado.getPuntos(MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada));
         System.out.println("Puntos Totales: " + puntosDelUsuario.getPuntosTotales());
         System.out.println("Puntos para Descuento: " + puntosDelUsuario.getPuntosParaDescuento());
     }
 
     public void verFacturasDelUsuario(){
-        System.out.println("Seleccione factura");
         if (InicioDeSesionCliente.clienteIniciado.getFacturas().size() == 0){
             System.out.println("No tenes facturas");
             return;
         }
         for (int i = 0; i < InicioDeSesionCliente.clienteIniciado.getFacturas().size() ; i++) {
-            System.out.println(++i + ") Tipo de factura : " + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getTipoDeFactura() + "\n" +
-                    "Fecha de la factura : " + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getFechaDelViaje().getDay() + "/" + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getFechaDelViaje().getMonth() + "/" + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getFechaDelViaje().getYear());
+            System.out.println(i + ") Tipo de factura : " + InicioDeSesionCliente.clienteIniciado.getFacturas().get(i).getTipoDeFactura());
+
         }
-        int facturaSeleccionada = scanner.nextInt();
+        int facturaSeleccionada = Scanner.getInt("Seleccione factura : ");
         InicioDeSesionCliente.clienteIniciado.getFacturas().get(facturaSeleccionada).mostrarFactura();
     }
 

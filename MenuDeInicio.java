@@ -2,25 +2,22 @@ package prog2.TP;
 
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class MenuDeInicio {
-    private Scanner scanner = new Scanner(System.in);
-    private InicioDeSesionAdministrador inicioDeSesionAdministrador = new InicioDeSesionAdministrador();
-    private InicioDeSesionCliente inicioDeSesionCliente = new InicioDeSesionCliente();
+    public static InicioDeSesionAdministrador inicioDeSesionAdministrador = new InicioDeSesionAdministrador();
+    public static InicioDeSesionCliente inicioDeSesionCliente = new InicioDeSesionCliente();
     public static ActivosRepositorio activosRepositorio = new ActivosRepositorio();
     public static ZonasRepositorio zonasRepositorio = new ZonasRepositorio();
     public static ClientesRepositorio clientesRepositorio = new ClientesRepositorio();
     public static AdministradoresRepositorio administradoresRepositorio = new AdministradoresRepositorio();
-    public static ArrayList<TablaDePuntaje> tablasDePuntaje;
+    public static ArrayList<TablaDePuntaje> tablasDePuntaje = new ArrayList<>();
 
-    public void inicioDeSesion(){
-        System.out.println("Iniciar como administrador o como cliente \n");
-        System.out.println("Salir");
-        String respuesta = scanner.nextLine();
+    public static void inicioDeSesion(){
 
-        while(!respuesta.equals("administrador") && !respuesta.equals("cliente")){
-            System.out.println("Elija una opcion valida \n");
+        String respuesta = Scanner.getString("Iniciar sesion como administrador o cliente. Si desea salir, ingrese salir : ");
+
+        while(!respuesta.equals("administrador") && !respuesta.equals("cliente") && !respuesta.equals("salir")){
+            System.out.println("Elija una opcion valida");
             inicioDeSesion();
 
         }

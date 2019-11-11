@@ -1,30 +1,32 @@
 package prog2.TP;
 
-import java.util.Scanner;
+
+import java.sql.SQLOutput;
 
 public class InicioDeSesionCliente {
-    private Scanner scanner = new Scanner(System.in);
     private MenuClienteInterfaz menuCliente = new MenuClienteInterfaz();
     public static Cliente clienteIniciado;
 
-    public void inicioDeSesionCliente(){
+    public void inicioDeSesionCliente() {
 
-        System.out.println("Queres iniciar sesion o registrarte");
-        String respuesta = scanner.nextLine();
-        if (respuesta.equals("iniciar sesion")){
+        String respuesta = Scanner.getString("Queres iniciar sesion o registrarte. Si desea salir, ingrese salir : ");
+        if (respuesta.equals("iniciar sesion")) {
             iniciarSesion();
-        }
-        if (respuesta.equals("registrarte")){
+        } else if (respuesta.equals("registrarte")) {
             registrarse();
+        } else if (respuesta.equals("salir")) {
+            MenuDeInicio.inicioDeSesion();
+        }else{
+            System.out.println("Ingrese una opcion valida");
+            inicioDeSesionCliente();
         }
     }
 
-    public void iniciarSesion(){
-        System.out.println("Ingresar nombre de usuario : \n");
-        String nombreDeUsuario = scanner.nextLine();
 
-        System.out.println("Ingrese contrasena : ");
-        String contrasena = scanner.nextLine();
+    public void iniciarSesion(){
+        String nombreDeUsuario = Scanner.getString("Ingresar nombre de usuario : ");
+
+        String contrasena = Scanner.getString("Ingrese contrasena : ");
         if (MenuDeInicio.clientesRepositorio.listar().size() == 0){
             System.out.println("No hay clientes en el sistema");
             return;
@@ -42,13 +44,10 @@ public class InicioDeSesionCliente {
     }
 
     public void registrarse(){
-        System.out.println("Ingresar numero de telefono : \n");
-        int numeroDeTelefono = scanner.nextInt();
+        int numeroDeTelefono = Scanner.getInt("Ingresar numero de telefono : ");
         if (MenuDeInicio.clientesRepositorio.listar().size() == 0){
-            System.out.println("Ingresar un nombre : \n");
-            String nombre = scanner.nextLine();
-            System.out.println("Ingresar una contrasena : \n");
-            String contrasena = scanner.nextLine();
+            String nombre = Scanner.getString("Ingresar un nombre : ");
+            String contrasena = Scanner.getString("Ingresar una contrasena : ");
             Cliente clienteNuevo = new Cliente(numeroDeTelefono,nombre,contrasena);
             MenuDeInicio.clientesRepositorio.agregar(clienteNuevo);
             setClienteIniciado(clienteNuevo);
@@ -58,6 +57,13 @@ public class InicioDeSesionCliente {
                 if (numeroDeTelefono == cliente.getNumeroDeTelefono()) {
                     System.out.println("El numero de telefono ya esta asociado a una cuenta");
                     registrarse();
+                }else{
+                    String nombre = Scanner.getString("Ingresar un nombre : ");
+                    String contrasena = Scanner.getString("Ingresar una contrasena : ");
+                    Cliente clienteNuevo = new Cliente(numeroDeTelefono,nombre,contrasena);
+                    MenuDeInicio.clientesRepositorio.agregar(clienteNuevo);
+                    setClienteIniciado(clienteNuevo);
+                    menuCliente.menuCliente();
                 }
             }
         }

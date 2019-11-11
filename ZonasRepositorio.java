@@ -40,13 +40,8 @@ public class ZonasRepositorio implements Repositorio<Zona> {
     public ArrayList<Terminal> listarTerminales(){
         ArrayList<Terminal> listaTerminales = new ArrayList<>();
         for (Zona zona: repositorioZonas) {
-            for (Terminal terminal : listaTerminales) {
-                for (int i = 0; i < zona.getTerminales().size(); i++) {
-                    if (!zona.getTerminales().get(i).equals(terminal)){
-                        listaTerminales.add(zona.getTerminales().get(i));
-                    }
-                }
-
+            for (int i = 0; i < zona.getTerminales().size(); i++) {
+                listaTerminales.add(zona.getTerminales().get(i));
             }
         }
         return listaTerminales;
@@ -55,14 +50,9 @@ public class ZonasRepositorio implements Repositorio<Zona> {
     public ArrayList<Terminal> listarTerminales(Zona zona){
         ArrayList<Terminal> listaTerminales = new ArrayList<>();
         for (Zona zona2: repositorioZonas) {
-            if (zona2.getNombreZona().equals(zona.getNombreZona())) {
-                for (Terminal terminal : listaTerminales) {
-                    for (int i = 0; i < zona.getTerminales().size(); i++) {
-                        if (!zona.getTerminales().get(i).equals(terminal)) {
-                            listaTerminales.add(zona.getTerminales().get(i));
-                        }
-                    }
-
+            if (zona2.equals(zona)){
+                for (int i = 0; i < zona.getTerminales().size(); i++) {
+                    listaTerminales.add(zona.getTerminales().get(i));
                 }
             }
         }

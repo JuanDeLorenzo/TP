@@ -6,15 +6,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TablaDePuntaje {
     private Zona zona;
-    private HashMap<String, Integer> tabla;
+    private ArrayList<Cliente> tablaDePuntajes;
     private ArrayList<Cliente> topTres;
 
     public TablaDePuntaje(Zona zona, ArrayList<Cliente> usuarios) {
         this.zona = zona;
-        ordenarPuntaje(zona, usuarios);
-        topTres = crearTopTres(usuarios);
-        tabla = crearHashMapTopDiez(usuarios, zona);
-
+        ArrayList<Cliente> usuariosOrdenados = ordenarPuntaje(zona, usuarios);
+        topTres = crearTopTres(usuariosOrdenados);
+        tablaDePuntajes = crearTablaDePuntajes(usuariosOrdenados);
     }
 
     public void entregarCuponDeDescuento(){
@@ -31,29 +30,45 @@ public class TablaDePuntaje {
         return topTres;
     }
 
-    public void ordenarPuntaje(Zona zona, ArrayList<Cliente> usuarios) {
+    public ArrayList<Cliente> ordenarPuntaje(Zona zona, ArrayList<Cliente> usuarios) {
+        ArrayList<Cliente> usuariosOrdenados;
         usuarios.sort((Cliente a, Cliente b) -> b.getPuntos(zona).getPuntosTotales() - a.getPuntos(zona).getPuntosTotales());
+        usuariosOrdenados = usuarios;
+        return usuariosOrdenados;
     }
 
-    public HashMap<String, Integer> crearHashMapTopDiez(ArrayList<Cliente> usuarios, Zona zona) {
-        HashMap<String, Integer> tabla = new HashMap<>();
-        for (int i = 0; i < 9; i++) {
-            tabla.put(usuarios.get(i).getAlias(), usuarios.get(i).getPuntos(zona).getPuntosTotales());
+    public ArrayList<Cliente> crearTablaDePuntajes(ArrayList<Cliente> usuarios){
+        ArrayList<Cliente> tablaDePuntajes = new ArrayList<>();
+        if (usuarios.size() == 0){
+            System.out.println("No hay usuarios en la zona seleccionada");
+            return tablaDePuntajes;
+
+        }else if (usuarios.size() < 9){
+            for (int i = 0; i < usuarios.size(); i++) {
+                tablaDePuntajes.add(usuarios.get(i));
+            }
+
+        }else{
+            for (int i = 0; i < 9; i++) {
+                tablaDePuntajes.add(usuarios.get(i));
+            }
         }
-        return tabla;
+        return tablaDePuntajes;
     }
 
-    public void printLeaderBoard() {
-        AtomicInteger contador = new AtomicInteger(1);
-        tabla.forEach((Alias,Puntos) -> System.out.println(contador.getAndIncrement() + ") Usuario: " + Alias + ", Puntos: " + Puntos));
+
+    public void mostrarTablaDePuntaje() {
+        if (tablaDePuntajes.size() == 0){
+            System.out.println("No hay usuarios en la zona seleccionada");
+            return;
+        }
+        for (int i = 0; i < tablaDePuntajes.size(); i++) {
+            System.out.println(i + ") Usuario : " + tablaDePuntajes.get(i).getAlias() + "\n" + " Puntos : " + tablaDePuntajes.get(i).getPuntos(zona).getPuntosTotales());
+        }
     }
 
     public Zona getZona() {
         return zona;
-    }
-
-    public HashMap<String, Integer> getTabla() {
-        return tabla;
     }
 
     public ArrayList<Cliente> getTopTres() {

@@ -4,31 +4,30 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Viaje {
-    private Date tiempoDeSalida;
-    private Date tiempoDeEntrega;
+    private int tiempoDeEntrega;
+    private int duracionDelViaje;
     private Terminal terminalDeSalida;
     private Terminal terminalDeEntrega;
     private Activo activoUsado;
     private Puntos puntosOtorgar;
     private Zona zona;
     private int costoDelViaje;
-    private Date tiempoDeEntregaPorElUsuario;
+    private int tiempoDeEntregaEstimado;
     private Descuento descuentoUtilizado;
 
 
-    public Viaje(Activo activoUsado, Date tiempoDeEntregaPorElUsuario) {
-        this.tiempoDeSalida = new Date();
+    public Viaje(Activo activoUsado, int tiempoDeEntregaEstimado) {
         this.activoUsado = activoUsado;
         this.terminalDeSalida = activoUsado.getTerminalDeActual();
         this.zona = activoUsado.getZona();
-        this.tiempoDeEntregaPorElUsuario = tiempoDeEntregaPorElUsuario;
+        this.tiempoDeEntregaEstimado = tiempoDeEntregaEstimado;
         activoUsado.cambiarEstadoAAlquilado();
     }
 
-    public void finDelViaje(Terminal terminalDeEntrega, int puntos){
+    public void finDelViaje(Terminal terminalDeEntrega, int puntos, int duracionDelViaje, int tiempoDeEntrega){
         terminalEntrega(terminalDeEntrega);
-        Date tiempoDeEntrega = new Date();
-        setTiempoDeEntrega(tiempoDeEntrega);
+        this.duracionDelViaje = duracionDelViaje;
+        this.tiempoDeEntrega = tiempoDeEntrega;
         int puntosDelViaje = puntosDeViaje();
         int costoDelViaje = calcularCostoDeViaje(puntos);
         Puntos puntosParaUsuario = new Puntos(zona);
@@ -47,8 +46,8 @@ public class Viaje {
     }
 
     public int puntosDeViaje(){
-        int puntos = tiempoDeSalida.getMinutes() * activoUsado.getTipoDeActivo().getPuntosPorMinuto();
-        if (tiempoDeEntrega.compareTo(this.tiempoDeEntregaPorElUsuario) <= 0){
+        int puntos = duracionDelViaje * activoUsado.getTipoDeActivo().getPuntosPorMinuto();
+        if (tiempoDeEntrega == tiempoDeEntregaEstimado){
             return (int) (puntos * 0.2);
         }
         return puntos;
@@ -58,7 +57,7 @@ public class Viaje {
     public int calcularCostoDeViaje(int puntos){
         Descuento descuento = descuentoOptimo(puntos);
         descuentoUtilizado = descuento;
-        return costoDelViaje * (1-descuento.getPorcentajeDeDescuento()/100);
+        return duracionDelViaje * activoUsado.getTipoDeActivo().getCostoPorMinuto() * (1-descuento.getPorcentajeDeDescuento()/100);
     }
 
     public Descuento descuentoOptimo(int puntos) {
@@ -79,20 +78,9 @@ public class Viaje {
 
 
 
-    public Date getTiempoDeSalida() {
-        return tiempoDeSalida;
-    }
 
-    public Date getTiempoDeEntrega() {
+    public int getTiempoDeEntrega() {
         return tiempoDeEntrega;
-    }
-
-    public void setTiempoDeEntrega(Date tiempoDeEntrega) {
-        this.tiempoDeEntrega = tiempoDeEntrega;
-    }
-
-    public void setTerminalDeEntrega(Terminal terminalDeEntrega) {
-        this.terminalDeEntrega = terminalDeEntrega;
     }
 
     public Zona getZona() {
@@ -125,5 +113,9 @@ public class Viaje {
 
     public Descuento getDescuentoUtilizado() {
         return descuentoUtilizado;
+    }
+
+    public int getDuracionDelViaje() {
+        return duracionDelViaje;
     }
 }

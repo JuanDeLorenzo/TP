@@ -3,16 +3,17 @@ package prog2.TP;
 import java.util.Date;
 
 public class Factura {
-    String tipoDeFactura;
-    int costoDelViaje;
-    int puntosObtenidos;
-    Activo activoUtilizado;
-    Terminal terminalDeSalida;
-    Terminal terminalDeEntrega;
-    Descuento descuentoUtilizado;
-    Date fechaDelViaje;
+    private String tipoDeFactura;
+    private int costoDelViaje;
+    private int puntosObtenidos;
+    private Activo activoUtilizado;
+    private Terminal terminalDeSalida;
+    private Terminal terminalDeEntrega;
+    private Descuento descuentoUtilizado;
+    private int duracionDelViaje;
 
-    public Factura(int costoDelViaje, int puntosObtenidos, Activo activoUtilizado, Terminal terminalDeSalida, Terminal terminalDeEntrega, Descuento descuentoUtilizado, Date fechaDelViaje) { //En caso de un viaje.
+
+    public Factura(int costoDelViaje, int puntosObtenidos, Activo activoUtilizado, Terminal terminalDeSalida, Terminal terminalDeEntrega, Descuento descuentoUtilizado, int duracionDelViaje) { //En caso de un viaje.
         tipoDeFactura = "Viaje";
         this.costoDelViaje = costoDelViaje;
         this.puntosObtenidos = puntosObtenidos;
@@ -20,7 +21,7 @@ public class Factura {
         this.terminalDeSalida = terminalDeSalida;
         this.terminalDeEntrega = terminalDeEntrega;
         this.descuentoUtilizado = descuentoUtilizado;
-        this.fechaDelViaje = fechaDelViaje;
+        this.duracionDelViaje = duracionDelViaje;
     }
 
     public Factura(int valorDeLaMulta){ //En caso de que sea una multa.
@@ -48,8 +49,8 @@ public class Factura {
         return terminalDeEntrega;
     }
 
-    public Date getFechaDelViaje(){
-        return fechaDelViaje;
+    public int getDuracionDelViaje() {
+        return duracionDelViaje;
     }
 
     public String getTipoDeFactura() {
@@ -65,11 +66,10 @@ public class Factura {
                     "Terminal de salida : " + terminalDeSalida.getNombre() + "\n" +
                     "Terminal de entrega : " + terminalDeEntrega.getNombre() + "\n" +
                     "Porcentaje de descuento : " + descuentoUtilizado.getPorcentajeDeDescuento() + "\n" +
-                    "Fecha del viaje : "+ fechaDelViaje);
+                    "Duracion del Viaje : "+ duracionDelViaje);
         }else{
             System.out.println ("Tipo de factura : " + tipoDeFactura + "\n" +
-                    "Precio de la multa : " + costoDelViaje + "\n" +
-                    "Fecha de la multa : " + fechaDelViaje);
+                    "Precio de la multa : " + costoDelViaje);
         }
     }
 }

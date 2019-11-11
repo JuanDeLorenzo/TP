@@ -57,6 +57,5 @@ public class Administrador extends Usuario{
         return new TablaDePuntaje(zona, usuarios);
     }
 
-
 }
 

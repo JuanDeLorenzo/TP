@@ -45,7 +45,7 @@ public abstract class Usuario {
         puntosDelUsuario.add(new Puntos(zona));
     }
 
-    public void iniciarViaje(Activo activo, Date horaDeEntregaEstimada){
+    public void iniciarViaje(Activo activo, int horaDeEntregaEstimada){
         if (activo.isEstaAlquilado() == true){
             throw new RuntimeException("El activo esta alquilado");
         }
@@ -55,16 +55,16 @@ public abstract class Usuario {
         activo.setViaje(new Viaje(activo, horaDeEntregaEstimada));
     }
 
-    public void alquilarActivo(Activo activo, Date horaDeEntregaEstimada){
+    public void alquilarActivo(Activo activo, int horaDeEntregaEstimada){
         activoAlquilado = activo;
         iniciarViaje(activo, horaDeEntregaEstimada);
     }
 
-    public void entregaActivo(Terminal terminalDeEntrega){
-        activoAlquilado.getViaje().finDelViaje(terminalDeEntrega, getPuntos(activoAlquilado.getZona()).getPuntosParaDescuento());
+    public void entregaActivo(Terminal terminalDeEntrega, int duracionDelViaje, int timepoDeEntrega){
+        activoAlquilado.getViaje().finDelViaje(terminalDeEntrega, getPuntos(activoAlquilado.getZona()).getPuntosParaDescuento(), duracionDelViaje, timepoDeEntrega);
         getPuntos(activoAlquilado.getZona()).sumarPuntos(activoAlquilado.getViaje().getPuntosOtorgar());
         aplicarCuponDelMes();
-        Factura factura = new Factura(activoAlquilado.getViaje().getCostoDelViaje(), activoAlquilado.getViaje().getPuntosOtorgar().getPuntosTotales(), activoAlquilado, activoAlquilado.getViaje().getTerminalDeSalida(), activoAlquilado.getViaje().getTerminalDeEntrega(), activoAlquilado.getViaje().getDescuentoUtilizado(),activoAlquilado.getViaje().getTiempoDeSalida());
+        Factura factura = new Factura(activoAlquilado.getViaje().getCostoDelViaje(), activoAlquilado.getViaje().getPuntosOtorgar().getPuntosTotales(), activoAlquilado, activoAlquilado.getViaje().getTerminalDeSalida(), activoAlquilado.getViaje().getTerminalDeEntrega(), activoAlquilado.getViaje().getDescuentoUtilizado(), activoAlquilado.getViaje().getDuracionDelViaje());
         activoAlquilado = null;
         agregarFactura(factura);
     }

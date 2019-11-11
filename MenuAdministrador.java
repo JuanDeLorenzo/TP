@@ -1,14 +1,12 @@
 package prog2.TP;
 
-import java.util.Scanner;
 
 public class MenuAdministrador {
-    private Scanner scanner = new Scanner(System.in);
+
 
 
     public void bloquearUsuario(){
-        System.out.println("Ingresar telefono de usuario que desea bloquear");
-        int usuarioBloquear = scanner.nextInt();
+        int usuarioBloquear = prog2.TP.Scanner.getInt("Ingresar telefono de usuario que desea bloquear : ");
         if (MenuDeInicio.clientesRepositorio.listar().size() == 0){
             System.out.println("No hay usuarios en el sistema");
             return;
@@ -24,8 +22,7 @@ public class MenuAdministrador {
     }
 
     public void desbloquarUsuario(){
-        System.out.println("Ingresar telefono de usuario que desea desbloquear");
-        int usuarioDesbloquear = scanner.nextInt();
+        int usuarioDesbloquear = prog2.TP.Scanner.getInt("Ingresar telefono de usuario que desea desbloquear : ");
         if (MenuDeInicio.clientesRepositorio.listar().size() == 0){
             System.out.println("No hay usuarios en el sistema");
             return;
@@ -35,20 +32,19 @@ public class MenuAdministrador {
                 InicioDeSesionAdministrador.administradorIniciado.desbloquearUsuario(usuario);
                 break;
             }else{
-                System.out.println("No hay usuario asociado al telefono ingresado");
+                System.out.println("No hay usuario asociado al telefono ingresado : ");
             }
         }
     }
 
     public void multarUsuario(){
-        System.out.println("Ingresar telefono de usuario que desea multar");
-        int usuarioMultar = scanner.nextInt();
+        int usuarioMultar = prog2.TP.Scanner.getInt("Ingresar telefono de usuario que desea multar : ");
         if (MenuDeInicio.clientesRepositorio.listar().size() == 0){
             System.out.println("No hay usuarios en el sistema");
             return;
         }
-        System.out.println("Ingrese valor de la multa");
-        int valorMulta = scanner.nextInt();
+
+        int valorMulta = Scanner.getInt("Ingrese valor de la multa : ");
         for (Cliente usuario: MenuDeInicio.clientesRepositorio.listar()) {
             if (usuario.getNumeroDeTelefono() == usuarioMultar){
                 InicioDeSesionAdministrador.administradorIniciado.multarUsuario(usuario, valorMulta);
@@ -60,8 +56,7 @@ public class MenuAdministrador {
     }
 
     public void crearLoteDeCompra(){
-        System.out.println("Ingresar nombre del activo que quiere comprar");
-        String tipoDeActivoIngresado = scanner.nextLine();
+        String tipoDeActivoIngresado = prog2.TP.Scanner.getString("Ingresar nombre del activo que quiere comprar : ");
 
 
         TipoDeActivo tipoDeActivoSeleccionado = null;
@@ -73,13 +68,10 @@ public class MenuAdministrador {
 
 
         if (tipoDeActivoSeleccionado == null){
-            System.out.println("Tipo de activo no existente, desea crearlo?");
-            String respuesta = scanner.nextLine();
+            String respuesta = prog2.TP.Scanner.getString("Tipo de activo no existente, desea crearlo? ");
             if (respuesta.equals("si")){
-                System.out.println("Ingrese costo por minuto del Activo");
-                int costoDelActivo = scanner.nextInt();
-                System.out.println("Ingrese puntos por minuto del Activo");
-                int puntosDelActivo = scanner.nextInt();
+                int costoDelActivo = prog2.TP.Scanner.getInt("Ingrese costo por minuto del Activo : ");
+                int puntosDelActivo = prog2.TP.Scanner.getInt("Ingrese puntos por minuto del Activo : ");
                 tipoDeActivoSeleccionado = new TipoDeActivo(tipoDeActivoIngresado,puntosDelActivo,costoDelActivo);
             }else{
                 return;
@@ -87,7 +79,6 @@ public class MenuAdministrador {
 
         }
 
-        System.out.println("Seleccionar zona");
         if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
             System.out.println("No hay zonas en el sistema");
             return;
@@ -96,9 +87,8 @@ public class MenuAdministrador {
         for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size(); i++) {
             System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
-        int zonaSeleccionada = scanner.nextInt();
+        int zonaSeleccionada = prog2.TP.Scanner.getInt("Seleccionar una zona : ");
 
-        System.out.println("Seleccionar terminal");
         if (MenuDeInicio.zonasRepositorio.listarTerminales().size() == 0){
             System.out.println("No hay terminales en el sistema");
             return;
@@ -106,18 +96,19 @@ public class MenuAdministrador {
         for (int i = 0; i < MenuDeInicio.zonasRepositorio.listarTerminales().size() ; i++) {
             System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listarTerminales(MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada)).get(i).getNombre());
         }
-        int terminalSeleccionada = scanner.nextInt();
+        int terminalSeleccionada = prog2.TP.Scanner.getInt("Seleccionar terminal : ");
 
-        System.out.println("Ingresar cantidad de activos a comprar");
-        int cantidadDeActivos = scanner.nextInt();
+        int cantidadDeActivos = prog2.TP.Scanner.getInt("Ingresar cantidad de activos a comprar : ");
 
-        InicioDeSesionAdministrador.administradorIniciado.crearLoteDeCompra(tipoDeActivoSeleccionado, MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), MenuDeInicio.zonasRepositorio.listarTerminales().get(terminalSeleccionada),cantidadDeActivos);
-
+        LoteDeCompra nuevoLoteDeCompra = InicioDeSesionAdministrador.administradorIniciado.crearLoteDeCompra(tipoDeActivoSeleccionado, MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), MenuDeInicio.zonasRepositorio.listarTerminales().get(terminalSeleccionada),cantidadDeActivos);
+        for (Activo activo : nuevoLoteDeCompra.getLoteDeCompra() ) {
+            MenuDeInicio.activosRepositorio.agregar(activo);
+        }
+        System.out.println("La compra se realizo exitosamente");
     }
 
     public void crearTerminal(){
-        System.out.println("Ingrese nombre de la terminal");
-        String nombreDeLaTerminal = scanner.nextLine();
+        String nombreDeLaTerminal = Scanner.getString("Ingrese nombre de la terminal : ");
         for (Terminal terminal : MenuDeInicio.zonasRepositorio.listarTerminales()) {
             if (nombreDeLaTerminal.equals(terminal.getNombre())){
                 System.out.println("Ya existe una terminal con ese nombre");
@@ -125,7 +116,6 @@ public class MenuAdministrador {
             }
         }
 
-        System.out.println("Ingese zona de la terminal");
         if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
             System.out.println("No hay zonas en el sistema");
             return;
@@ -133,14 +123,13 @@ public class MenuAdministrador {
         for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size(); i++) {
             System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
-        int zonaSeleccionada = scanner.nextInt();
+        int zonaSeleccionada = Scanner.getInt("Ingese zona de la terminal : ");
         System.out.println("La terminal fue creada con exito");
         MenuDeInicio.zonasRepositorio.listarTerminales().add(InicioDeSesionAdministrador.administradorIniciado.crearTerminal(nombreDeLaTerminal, MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada)));
     }
 
     public void crearZona(){
-        System.out.println("Ingrese nombre de la zona");
-        String nombreDeLaZona = scanner.nextLine();
+        String nombreDeLaZona = Scanner.getString("Ingrese nombre de la zona");
         for (Zona zona : MenuDeInicio.zonasRepositorio.listar()) {
             if (nombreDeLaZona.equals(zona.getNombreZona())){
                 System.out.println("Ya existe una zona con ese nombre");
@@ -152,18 +141,18 @@ public class MenuAdministrador {
     }
 
     public void crearTablaDePuntajes(){
+
         if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
             System.out.println("No hay zonas en el sistema");
             return;
         }
         for (Zona zona:MenuDeInicio.zonasRepositorio.listar()) {
-            MenuDeInicio.tablasDePuntaje.add(InicioDeSesionAdministrador.administradorIniciado.crearTablaDePuntajes(zona, ClientesRepositorio.repositorioClientes));
+            MenuDeInicio.tablasDePuntaje.add(InicioDeSesionAdministrador.administradorIniciado.crearTablaDePuntajes(zona, MenuDeInicio.clientesRepositorio.listar()));
         }
         System.out.println("Las tablas se crearon exitosamente");
     }
 
     public void verTablaDePuntajes(){
-        System.out.println("Seleccionar zona");
         if (ZonasRepositorio.repositorioZonas.size() == 0){
             System.out.println("No hay zonas en el sistema");
             return;
@@ -171,13 +160,16 @@ public class MenuAdministrador {
         for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size(); i++) {
             System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
         }
-        int zonaSeleccionada = scanner.nextInt();
-
+        int zonaSeleccionada = Scanner.getInt("Seleccionar zona : ");
+        if(MenuDeInicio.tablasDePuntaje.size() == 0){
+            System.out.println("No hay usuarios en la zona seleccionada");
+            return;
+        }
         for (TablaDePuntaje tablaDePuntaje: MenuDeInicio.tablasDePuntaje) {
             if (MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada).equals(tablaDePuntaje.getZona())){
-                tablaDePuntaje.printLeaderBoard();
+                tablaDePuntaje.mostrarTablaDePuntaje();
+                break;
             }
-            break;
         }
     }
 
@@ -198,6 +190,23 @@ public class MenuAdministrador {
         }
         InicioDeSesionAdministrador.administradorIniciado.reiniciarPuntos(MenuDeInicio.clientesRepositorio.listar());
         System.out.println("Se resetearon los puntos exitosamente");
+    }
+
+    public void agregarDescuentoAActivo(){
+        for (int i = 0; i < MenuDeInicio.activosRepositorio.listarTipoDeActivos().size(); i++) {
+            System.out.println(i + ") " + MenuDeInicio.activosRepositorio.listarTipoDeActivos().get(i).getTipoDeActivo());
+        }
+        int seleccionarActivo = Scanner.getInt("Seleccionar un activo : ");
+        int puntosRequeridosDescuento = Scanner.getInt("Ingresar puntos requeridos para aplicar al descuento : ");
+        int porcentajeDelDescuento = Scanner.getInt("Ingresar porcentaje del descuento : ");
+        Descuento nuevoDescuento = new Descuento(puntosRequeridosDescuento,porcentajeDelDescuento);
+        for (Activo activo : MenuDeInicio.activosRepositorio.listar()) {
+            if (MenuDeInicio.activosRepositorio.listarTipoDeActivos().get(seleccionarActivo).equals(activo.getTipoDeActivo())){
+                activo.agregarDescuento(nuevoDescuento);
+            }
+        }
+        System.out.println("Los descuentos se agregaron exitosamente");
+
     }
 
 
