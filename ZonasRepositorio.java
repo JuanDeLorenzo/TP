@@ -20,4 +20,19 @@ public class ZonasRepositorio implements Repositorio<Zona> {
     public List<Zona> listar() {
         return repositorioZonas;
     }
+
+    public ArrayList<Terminal> listarTerminales(){
+        ArrayList<Terminal> listaTerminales = new ArrayList<>();
+        for (Zona zona: repositorioZonas) {
+            for (Terminal terminal : listaTerminales) {
+                for (int i = 0; i < zona.getTerminales().size(); i++) {
+                    if (!zona.getTerminales().get(i).equals(terminal)){
+                        listaTerminales.add(zona.getTerminales().get(i));
+                    }
+                }
+
+            }
+        }
+        return listaTerminales;
+    }
 }

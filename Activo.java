@@ -1,28 +1,82 @@
 package prog2.TP;
 
+import java.util.ArrayList;
+
 public abstract class Activo {
-    private final int costoPorMinuto;
-    private final int puntosPorMinuto;
+    private final TipoDeActivo tipoDeActivo;
     private final Zona zona;
     private boolean estaAlquilado;
+    private ArrayList<Descuento> descuentos;
+    private Viaje viaje;
+    private final int id;
+    private int codigoIncremental;
+    private Terminal terminalActual;
+    private LoteDeCompra loteDeCompra;
 
-    public Activo(int costoPorMinuto, int puntosPorMinuto, Zona zona){
-        this.costoPorMinuto = costoPorMinuto;
+
+    public Activo(TipoDeActivo tipoDeActivo, Zona zona){
+        this.tipoDeActivo = tipoDeActivo;
         this.zona = zona;
         this.estaAlquilado = false;
-        this.puntosPorMinuto = puntosPorMinuto;
-    }
-
-    public int tarifarioPorMinuto(int minutos){
-        return costoPorMinuto*minutos + zona.valorZona*minutos;
-    }
-
-    public int puntosOtorgar(int minutos){
-        return puntosPorMinuto*minutos;
-    }
-
-    public static void calucularDescuento(){
+        descuentos = new ArrayList<>();
+        id = codigoIncremental;
+        codigoIncremental++;
 
     }
 
+    public ArrayList<Descuento> getDescuentos() {
+        return descuentos;
+    }
+
+    public void agregarDescuento(Descuento descuento){
+        descuentos.add(descuento);
+    }
+
+    public TipoDeActivo getTipoDeActivo() {
+        return tipoDeActivo;
+    }
+
+    public Zona getZona() {
+        return zona;
+    }
+
+    public Terminal getTerminalDeActual() {
+        return terminalActual;
+    }
+
+    public void setTerminalDeActual(Terminal terminalDeActual) {
+        this.terminalActual = terminalDeActual;
+    }
+
+    public Viaje getViaje() {
+        return viaje;
+    }
+
+    public void setViaje(Viaje viaje) {
+        this.viaje = viaje;
+    }
+
+    public void cambiarEstadoAAlquilado() {
+        this.estaAlquilado = true;
+    }
+
+    public void cambiarEstadoANoAlquilado() {
+        this.estaAlquilado = false;
+    }
+
+    public boolean isEstaAlquilado() {
+        return estaAlquilado;
+    }
+
+    public LoteDeCompra getLoteDeCompra() {
+        return loteDeCompra;
+    }
+
+    public void setLoteDeCompra(LoteDeCompra loteDeCompra) {
+        this.loteDeCompra = loteDeCompra;
+    }
+
+    public String toString(){
+        return tipoDeActivo.getTipoDeActivo()+ " " + id;
+    }
 }

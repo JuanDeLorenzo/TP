@@ -1,12 +1,29 @@
 package prog2.TP;
 
+import java.util.ArrayList;
+
 public class Zona {
-    final String lugar;
-    final int valorZona;
+    private final String nombreZona;
+    private ArrayList<Terminal> terminales;
 
-    public Zona(String lugar, int valorZona){
-        this.lugar = lugar;
-        this.valorZona = valorZona;
+    public Zona(String nombreZona){
+        this.nombreZona = nombreZona;
+        terminales = new ArrayList<>();
+    }
 
+    public void agregarTerminal(Terminal terminal){ //eliminar terminal, excepcion si ya esta repetida.
+        terminales.add(terminal);
+    }
+
+    public String getNombreZona() {
+        return nombreZona;
+    }
+
+    public ArrayList<Terminal> getTerminales() {
+        return terminales;
+    }
+
+    public void setTerminales(ArrayList<Terminal> terminales) {
+        this.terminales = terminales;
     }
 }

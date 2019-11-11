@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActivosRepositorio implements Repositorio<Activo> {
-    public static final List<Activo> repositorioActivos = new ArrayList<>();
+    public static List<Activo> repositorioActivos = new ArrayList<>();
 
     @Override
     public void agregar(Activo instancia) {
@@ -19,5 +19,17 @@ public class ActivosRepositorio implements Repositorio<Activo> {
     @Override
     public List<Activo> listar() {
         return repositorioActivos;
+    }
+
+    public ArrayList<TipoDeActivo> listarTipoDeActivos(){ //
+        ArrayList<TipoDeActivo> listaDeTipoDeActivos = new ArrayList<>();
+        for (Activo activo: repositorioActivos) {
+            for (TipoDeActivo tipoDeActivo:listaDeTipoDeActivos) {
+                if (!activo.getTipoDeActivo().equals(tipoDeActivo)){
+                    listaDeTipoDeActivos.add(activo.getTipoDeActivo());
+                }
+            }
+        }
+        return listaDeTipoDeActivos;
     }
 }
