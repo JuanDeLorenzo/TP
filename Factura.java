@@ -62,7 +62,7 @@ public class Factura {
             System.out.println ("Tipo de factura : " + tipoDeFactura + "\n" +
                     "Precio final : " + costoDelViaje + "\n" +
                     "Puntos obtenido : " + puntosObtenidos + "\n" +
-                    "Activo utilizado : " + activoUtilizado.getTipoDeActivo().getTipoDeActivo() + "\n" +
+                    "Activo utilizado : " + activoUtilizado.getTipoDeActivo().getNombreDelActivo() + "\n" +
                     "Terminal de salida : " + terminalDeSalida.getNombre() + "\n" +
                     "Terminal de entrega : " + terminalDeEntrega.getNombre() + "\n" +
                     "Porcentaje de descuento : " + descuentoUtilizado.getPorcentajeDeDescuento() + "\n" +

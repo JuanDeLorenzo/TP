@@ -18,7 +18,7 @@ public class Viaje {
 
     public Viaje(Activo activoUsado, int tiempoDeEntregaEstimado) {
         this.activoUsado = activoUsado;
-        this.terminalDeSalida = activoUsado.getTerminalDeActual();
+        this.terminalDeSalida = activoUsado.getTerminalActual();
         this.zona = activoUsado.getZona();
         this.tiempoDeEntregaEstimado = tiempoDeEntregaEstimado;
         activoUsado.cambiarEstadoAAlquilado();
@@ -35,14 +35,14 @@ public class Viaje {
         puntosParaUsuario.sumarPuntosParaDescuento(puntosDelViaje);
         puntosOtorgar = puntosParaUsuario;
         this.costoDelViaje = costoDelViaje;
-        activoUsado.setTerminalDeActual(terminalDeEntrega);
+        activoUsado.setTerminalActual(terminalDeEntrega);
     }
 
     public void terminalEntrega(Terminal terminalDeEntrega){
         if(terminalDeEntrega.getZona() != zona ){
             throw new RuntimeException("La terminal no coincide con la zona del activo");
         }
-        activoUsado.setTerminalDeActual(terminalDeEntrega);
+        activoUsado.setTerminalActual(terminalDeEntrega);
     }
 
     public int puntosDeViaje(){

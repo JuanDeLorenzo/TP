@@ -40,11 +40,11 @@ public class Activo {
         return zona;
     }
 
-    public Terminal getTerminalDeActual() {
+    public Terminal getTerminalActual() {
         return terminalActual;
     }
 
-    public void setTerminalDeActual(Terminal terminalDeActual) {
+    public void setTerminalActual(Terminal terminalDeActual) {
         this.terminalActual = terminalDeActual;
     }
 
@@ -77,6 +77,6 @@ public class Activo {
     }
 
     public String toString(){
-        return tipoDeActivo.getTipoDeActivo()+ " " + id;
+        return tipoDeActivo.getNombreDelActivo()+ " " + id;
     }
 }

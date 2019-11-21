@@ -32,7 +32,7 @@ public class MenuAdministrador {
                 InicioDeSesionAdministrador.administradorIniciado.desbloquearUsuario(usuario);
                 break;
             }else{
-                System.out.println("No hay usuario asociado al telefono ingresado : ");
+                System.out.println("No hay usuario asociado al telefono ingresado");
             }
         }
     }
@@ -56,28 +56,6 @@ public class MenuAdministrador {
     }
 
     public void crearLoteDeCompra(){
-        String tipoDeActivoIngresado = prog2.TP.Scanner.getString("Ingresar nombre del activo que quiere comprar : ");
-
-
-        TipoDeActivo tipoDeActivoSeleccionado = null;
-        for (Activo activo: MenuDeInicio.activosRepositorio.listar()) {
-            if (tipoDeActivoIngresado.equals(activo.getTipoDeActivo().getTipoDeActivo())){
-                tipoDeActivoSeleccionado = activo.getTipoDeActivo();
-            }
-        }
-
-
-        if (tipoDeActivoSeleccionado == null){
-            String respuesta = prog2.TP.Scanner.getString("Tipo de activo no existente, desea crearlo? ");
-            if (respuesta.equals("si")){
-                int costoDelActivo = prog2.TP.Scanner.getInt("Ingrese costo por minuto del Activo : ");
-                int puntosDelActivo = prog2.TP.Scanner.getInt("Ingrese puntos por minuto del Activo : ");
-                tipoDeActivoSeleccionado = new TipoDeActivo(tipoDeActivoIngresado,puntosDelActivo,costoDelActivo);
-            }else{
-                return;
-            }
-
-        }
 
         if (MenuDeInicio.zonasRepositorio.listar().size() == 0){
             System.out.println("No hay zonas en el sistema");
@@ -98,9 +76,34 @@ public class MenuAdministrador {
         }
         int terminalSeleccionada = prog2.TP.Scanner.getInt("Seleccionar terminal : ");
 
+        if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() == 0){
+            System.out.println("No hay activos en el sistema");
+        }
+        for (int i = 0; i <MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() ; i++) {
+            System.out.println(i + ")" + MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(i).getTipoDeActivo().getNombreDelActivo());
+            if (i == MenuDeInicio.activosRepositorio.listarActivosDiferentes().size()-1){
+                System.out.println(++i + ")Crear activo");
+            }
+        }
+        int tipoDeActivoIngresado = prog2.TP.Scanner.getInt("Seleccione el activo que desea comprar : ");
+
+
+        if (tipoDeActivoIngresado == MenuDeInicio.activosRepositorio.listarActivosDiferentes().size()){
+
+            String nombreDelActivo = Scanner.getString("Ingrese el nombre del activo : ");
+            int costoDelActivo = Scanner.getInt("Ingrese costo por minuto del activo : ");
+            int puntosDelActivo = Scanner.getInt("Ingrese puntos por minuto del activo : ");
+            Activo nuevoActivo = new Activo(new TipoDeActivo(nombreDelActivo,puntosDelActivo,costoDelActivo),MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada));
+            MenuDeInicio.activosRepositorio.agregar(nuevoActivo);
+            System.out.println("El activo ha sido creado exitosamente");
+            return;
+
+        }
+
+
         int cantidadDeActivos = prog2.TP.Scanner.getInt("Ingresar cantidad de activos a comprar : ");
 
-        LoteDeCompra nuevoLoteDeCompra = InicioDeSesionAdministrador.administradorIniciado.crearLoteDeCompra(tipoDeActivoSeleccionado, MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), MenuDeInicio.zonasRepositorio.listarTerminales().get(terminalSeleccionada),cantidadDeActivos);
+        LoteDeCompra nuevoLoteDeCompra = InicioDeSesionAdministrador.administradorIniciado.crearLoteDeCompra(MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(tipoDeActivoIngresado).getTipoDeActivo(), MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), MenuDeInicio.zonasRepositorio.listarTerminales().get(terminalSeleccionada),cantidadDeActivos);
         for (Activo activo : nuevoLoteDeCompra.getLoteDeCompra() ) {
             MenuDeInicio.activosRepositorio.agregar(activo);
         }
@@ -125,7 +128,7 @@ public class MenuAdministrador {
         }
         int zonaSeleccionada = Scanner.getInt("Ingese zona de la terminal : ");
         System.out.println("La terminal fue creada con exito");
-        MenuDeInicio.zonasRepositorio.listarTerminales().add(InicioDeSesionAdministrador.administradorIniciado.crearTerminal(nombreDeLaTerminal, MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada)));
+        MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada).agregarTerminal(new Terminal(MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), nombreDeLaTerminal));
     }
 
     public void crearZona(){
@@ -193,15 +196,18 @@ public class MenuAdministrador {
     }
 
     public void agregarDescuentoAActivo(){
-        for (int i = 0; i < MenuDeInicio.activosRepositorio.listarTipoDeActivos().size(); i++) {
-            System.out.println(i + ") " + MenuDeInicio.activosRepositorio.listarTipoDeActivos().get(i).getTipoDeActivo());
+        if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() == 0){
+            System.out.println("No hay activos en el sistema");
+        }
+        for (int i = 0; i <MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() ; i++) {
+            System.out.println(i + ")" + MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(i).getTipoDeActivo().getNombreDelActivo());
         }
         int seleccionarActivo = Scanner.getInt("Seleccionar un activo : ");
         int puntosRequeridosDescuento = Scanner.getInt("Ingresar puntos requeridos para aplicar al descuento : ");
         int porcentajeDelDescuento = Scanner.getInt("Ingresar porcentaje del descuento : ");
         Descuento nuevoDescuento = new Descuento(puntosRequeridosDescuento,porcentajeDelDescuento);
         for (Activo activo : MenuDeInicio.activosRepositorio.listar()) {
-            if (MenuDeInicio.activosRepositorio.listarTipoDeActivos().get(seleccionarActivo).equals(activo.getTipoDeActivo())){
+            if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(seleccionarActivo).getTipoDeActivo().getNombreDelActivo().equals(activo.getTipoDeActivo().getNombreDelActivo())){
                 activo.agregarDescuento(nuevoDescuento);
             }
         }

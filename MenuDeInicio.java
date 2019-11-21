@@ -13,11 +13,12 @@ public class MenuDeInicio {
     public static ArrayList<TablaDePuntaje> tablasDePuntaje = new ArrayList<>();
 
     public static void inicioDeSesion(){
-
-        String respuesta = Scanner.getString("Iniciar sesion como administrador o cliente. Si desea salir, ingrese salir : ");
+        System.out.println("Inicio de sesion \n");
+        String respuesta = Scanner.getString("Administrador \nCliente \nSalir \n\nIngrese una opcion : ");
+        respuesta.toLowerCase();
 
         while(!respuesta.equals("administrador") && !respuesta.equals("cliente") && !respuesta.equals("salir")){
-            System.out.println("Elija una opcion valida");
+            System.out.println("Elija una opcion valida\n");
             inicioDeSesion();
 
         }

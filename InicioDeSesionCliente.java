@@ -1,7 +1,6 @@
 package prog2.TP;
 
 
-import java.sql.SQLOutput;
 
 public class InicioDeSesionCliente {
     private MenuClienteInterfaz menuCliente = new MenuClienteInterfaz();
@@ -34,13 +33,12 @@ public class InicioDeSesionCliente {
         for (Cliente cliente: MenuDeInicio.clientesRepositorio.listar()) {
             if (nombreDeUsuario.equals(cliente.getAlias()) && contrasena.equals(cliente.getConstrasena())){
                 System.out.println("Inicio de sesion exitoso");
-                setClienteIniciado(cliente);
+                clienteIniciado = cliente;
                 menuCliente.menuCliente();
-            }else{
-                System.out.println("Los datos ingresados no son validos");
-                iniciarSesion();
             }
         }
+        System.out.println("Los datos ingresados no son validos");
+        iniciarSesion();
     }
 
     public void registrarse(){
@@ -50,7 +48,7 @@ public class InicioDeSesionCliente {
             String contrasena = Scanner.getString("Ingresar una contrasena : ");
             Cliente clienteNuevo = new Cliente(numeroDeTelefono,nombre,contrasena);
             MenuDeInicio.clientesRepositorio.agregar(clienteNuevo);
-            setClienteIniciado(clienteNuevo);
+            clienteIniciado = clienteNuevo;
             menuCliente.menuCliente();
         }else{
             for (Cliente cliente : MenuDeInicio.clientesRepositorio.listar()) {
@@ -62,15 +60,13 @@ public class InicioDeSesionCliente {
                     String contrasena = Scanner.getString("Ingresar una contrasena : ");
                     Cliente clienteNuevo = new Cliente(numeroDeTelefono,nombre,contrasena);
                     MenuDeInicio.clientesRepositorio.agregar(clienteNuevo);
-                    setClienteIniciado(clienteNuevo);
+                    clienteIniciado = clienteNuevo;
                     menuCliente.menuCliente();
                 }
             }
         }
     }
 
-    public static void setClienteIniciado(Cliente clienteIniciado) {
-        InicioDeSesionCliente.clienteIniciado = clienteIniciado;
-    }
+
 
 }

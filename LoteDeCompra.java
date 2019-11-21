@@ -14,8 +14,7 @@ public class LoteDeCompra {
             loteDeCompra.add(new Activo(tipoDeActivo, zona));
         }
         for (Activo activo: loteDeCompra) {
-            activo.setTerminalDeActual(terminal);
-            ActivosRepositorio.repositorioActivos.add(activo);
+            activo.setTerminalActual(terminal);
         }
         id = codigoIncremental;
         codigoIncremental++;

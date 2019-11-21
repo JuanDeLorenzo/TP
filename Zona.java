@@ -23,7 +23,4 @@ public class Zona {
         return terminales;
     }
 
-    public void setTerminales(ArrayList<Terminal> terminales) {
-        this.terminales = terminales;
-    }
 }

@@ -18,26 +18,24 @@ public class InicioDeSesionAdministrador {
             for (Administrador admin: MenuDeInicio.administradoresRepositorio.listar()) {
                 if (nombreDeUsuario.equals(admin.getAlias()) && contrasena.equals(admin.getConstrasena())){
                     System.out.println("Inicio de sesion exitoso");
-                    setAdministradorIniciado(admin);
+                    administradorIniciado = admin;
                     menuAdmin.menuAdministrador();
                     break;
-                }else{
-                    System.out.println("Los datos ingresados no son validos");
-                    inicioDeSesionAdmin();
                 }
             }
+            System.out.println("Los datos ingresados no son validos");
+            inicioDeSesionAdmin();
+
         }else if(respuesta.equals("salir")){
             MenuDeInicio.inicioDeSesion();
         }else{
-            System.out.println("Ingrese una respuesta valida");
+            System.out.println("Ingrese una respuesta valida\n");
             inicioDeSesionAdmin();
         }
 
 
     }
 
-    public void setAdministradorIniciado(Administrador administradorIniciado) {
-        this.administradorIniciado = administradorIniciado;
-    }
+
 
 }

@@ -1,18 +1,27 @@
 package prog2.TP;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MenuCliente {
 
 
     public void alquilarActivo(){
-        String zonaUsuario = Scanner.getString("Ingrese zona en la que se encuentra : ");
-        String terminalUsuario = Scanner.getString("Ingrese terminal en la que se encuentra : ");
+        if (InicioDeSesionCliente.clienteIniciado.isEstaBloqueado() == true){
+            System.out.println("El usuario esta bloqueado");
+            return;
+        }
+        for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size(); i++) {
+            System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
+        }
+        int zonaUsuario = Scanner.getInt("Ingrese zona en la que se encuentra : ");
+        for (int i = 0; i < MenuDeInicio.zonasRepositorio.listarTerminales().size() ; i++) {
+            System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listarTerminales(MenuDeInicio.zonasRepositorio.listar().get(zonaUsuario)).get(i).getNombre());
+        }
+        int terminalUsuario = Scanner.getInt("Ingrese terminal en la que se encuentra : ");
 
         ArrayList<Activo> activosCoincidentes = new ArrayList<>();
         for (Activo activo: MenuDeInicio.activosRepositorio.listar()) {
-            if (zonaUsuario.equals(activo.getZona().getNombreZona()) && terminalUsuario.equals(activo.getTerminalDeActual())) {
+            if (activo.getZona().getNombreZona().equals(MenuDeInicio.zonasRepositorio.listar().get(zonaUsuario).getNombreZona()) && activo.getTerminalActual().getNombre().equals(MenuDeInicio.zonasRepositorio.listarTerminales(MenuDeInicio.zonasRepositorio.listar().get(zonaUsuario)).get(terminalUsuario).getNombre())) {
                 activosCoincidentes.add(activo);
             }
         }
@@ -20,7 +29,7 @@ public class MenuCliente {
             System.out.println("No hay activos disponibles en tu ubicacion");
         }else{
             for (int i = 0; i < activosCoincidentes.size(); i++) {
-                System.out.println(++i + ") " + activosCoincidentes.get(i).toString());
+                System.out.println(i + ") " + activosCoincidentes.get(i).toString());
             }
             int activoSeleccionado = Scanner.getInt("Seleccione activo que desea alquilar : ");
 
@@ -32,7 +41,7 @@ public class MenuCliente {
 
     public void entregarActivo(){
         for (int i = 0; i < InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().size() ; i++) {
-            System.out.println(++i + ") " + InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(i).getNombre());
+            System.out.println(i + ") " + InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(i).getNombre());
         }
         int terminalSeleccionada = Scanner.getInt("Seleccione terminal de entrega del activo : ");
         int duracionDelViaje = Scanner.getInt("Ingrese duracion del viaje : ");

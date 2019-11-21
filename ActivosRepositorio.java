@@ -39,15 +39,21 @@ public class ActivosRepositorio implements Repositorio<Activo> {
         return repositorioActivos;
     }
 
-    public ArrayList<TipoDeActivo> listarTipoDeActivos(){ //
-        ArrayList<TipoDeActivo> listaDeTipoDeActivos = new ArrayList<>();
+    public ArrayList<Activo> listarActivosDiferentes(){ //
+        ArrayList<Activo> activosDiferentes = new ArrayList<>();
         for (Activo activo: repositorioActivos) {
-            for (TipoDeActivo tipoDeActivo:listaDeTipoDeActivos) {
-                if (!activo.getTipoDeActivo().equals(tipoDeActivo)){
-                    listaDeTipoDeActivos.add(activo.getTipoDeActivo());
+            if (activosDiferentes.size() == 0){
+                activosDiferentes.add(activo);
+            }else{
+                for (int i = 0; i < activosDiferentes.size(); ++i) {
+                    if (!activo.getTipoDeActivo().getNombreDelActivo().equals(activosDiferentes.get(i).getTipoDeActivo().getNombreDelActivo())){
+                        activosDiferentes.add(activo);
+                        break;
+                    }
                 }
             }
+
         }
-        return listaDeTipoDeActivos;
+        return activosDiferentes;
     }
 }

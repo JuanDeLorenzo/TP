@@ -1,7 +1,6 @@
 package prog2.TP;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public abstract class Usuario {
     private final int numeroDeTelefono;
@@ -73,6 +72,7 @@ public abstract class Usuario {
         if(cuponDelMes == true){
             activoAlquilado.getViaje().setCostoDelViaje((int)(activoAlquilado.getViaje().getCostoDelViaje() * 0.5));
         }
+        cuponDelMes = false;
     }
 
 
