@@ -44,33 +44,37 @@ public abstract class Usuario {
         puntosDelUsuario.add(new Puntos(zona));
     }
 
-    public void iniciarViaje(Activo activo, int horaDeEntregaEstimada){
-        if (activo.isEstaAlquilado() == true){
+    public void iniciarViaje(Activo activo, Tiempo horaDeEntregaEstimada){
+        if (activo.isEstaAlquilado()){
             throw new RuntimeException("El activo esta alquilado");
         }
-        if (isEstaBloqueado() == true){
+        if (isEstaBloqueado()){
             throw new RuntimeException("El usuario esta bloqueado");
         }
         activo.setViaje(new Viaje(activo, horaDeEntregaEstimada));
     }
 
-    public void alquilarActivo(Activo activo, int horaDeEntregaEstimada){
+    public void alquilarActivo(Activo activo, Tiempo horaDeEntregaEstimada){
         activoAlquilado = activo;
         iniciarViaje(activo, horaDeEntregaEstimada);
     }
 
-    public void entregaActivo(Terminal terminalDeEntrega, int duracionDelViaje, int timepoDeEntrega){
+    public void entregaActivo(Terminal terminalDeEntrega, int duracionDelViaje, Tiempo timepoDeEntrega){
         activoAlquilado.getViaje().finDelViaje(terminalDeEntrega, getPuntos(activoAlquilado.getZona()).getPuntosParaDescuento(), duracionDelViaje, timepoDeEntrega);
         getPuntos(activoAlquilado.getZona()).sumarPuntos(activoAlquilado.getViaje().getPuntosOtorgar());
+        getPuntos(activoAlquilado.getZona()).restarPuntos(activoAlquilado.getViaje().getDescuentoUtilizado().getPuntosRequeridos());
         aplicarCuponDelMes();
-        Factura factura = new Factura(activoAlquilado.getViaje().getCostoDelViaje(), activoAlquilado.getViaje().getPuntosOtorgar().getPuntosTotales(), activoAlquilado, activoAlquilado.getViaje().getTerminalDeSalida(), activoAlquilado.getViaje().getTerminalDeEntrega(), activoAlquilado.getViaje().getDescuentoUtilizado(), activoAlquilado.getViaje().getDuracionDelViaje());
+        Factura factura = new Factura(activoAlquilado.getViaje().getCostoDelViaje(), activoAlquilado.getViaje().getPuntosOtorgar().getPuntosTotales(), activoAlquilado, activoAlquilado.getViaje().getTerminalDeSalida(), activoAlquilado.getViaje().getTerminalDeEntrega(), activoAlquilado.getViaje().getDescuentoUtilizado(), activoAlquilado.getViaje().getDuracionDelViaje(),activoAlquilado.getViaje().isSeUtilizoCuponDelMes());
         activoAlquilado = null;
         agregarFactura(factura);
     }
 
     public void aplicarCuponDelMes(){
-        if(cuponDelMes == true){
+        if(cuponDelMes){
+            activoAlquilado.getViaje().siSeUtilizoCuponDelMes();
             activoAlquilado.getViaje().setCostoDelViaje((int)(activoAlquilado.getViaje().getCostoDelViaje() * 0.5));
+        }else{
+            activoAlquilado.getViaje().noSeUtilizoCuponDelMes();
         }
         cuponDelMes = false;
     }
@@ -118,6 +122,10 @@ public abstract class Usuario {
 
     public String getConstrasena() {
         return constrasena;
+    }
+
+    public void borrarActivoAlquilado() {
+        this.activoAlquilado = null;
     }
 }
 

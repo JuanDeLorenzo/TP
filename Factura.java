@@ -1,6 +1,5 @@
 package prog2.TP;
 
-import java.util.Date;
 
 public class Factura {
     private String tipoDeFactura;
@@ -11,9 +10,10 @@ public class Factura {
     private Terminal terminalDeEntrega;
     private Descuento descuentoUtilizado;
     private int duracionDelViaje;
+    private boolean seUtilizoCuponDelMes;
 
 
-    public Factura(int costoDelViaje, int puntosObtenidos, Activo activoUtilizado, Terminal terminalDeSalida, Terminal terminalDeEntrega, Descuento descuentoUtilizado, int duracionDelViaje) { //En caso de un viaje.
+    public Factura(int costoDelViaje, int puntosObtenidos, Activo activoUtilizado, Terminal terminalDeSalida, Terminal terminalDeEntrega, Descuento descuentoUtilizado, int duracionDelViaje, boolean seUtilizoCuponDelMes) { //En caso de un viaje.
         tipoDeFactura = "Viaje";
         this.costoDelViaje = costoDelViaje;
         this.puntosObtenidos = puntosObtenidos;
@@ -22,6 +22,7 @@ public class Factura {
         this.terminalDeEntrega = terminalDeEntrega;
         this.descuentoUtilizado = descuentoUtilizado;
         this.duracionDelViaje = duracionDelViaje;
+        this.seUtilizoCuponDelMes = seUtilizoCuponDelMes;
     }
 
     public Factura(int valorDeLaMulta){ //En caso de que sea una multa.
@@ -66,10 +67,19 @@ public class Factura {
                     "Terminal de salida : " + terminalDeSalida.getNombre() + "\n" +
                     "Terminal de entrega : " + terminalDeEntrega.getNombre() + "\n" +
                     "Porcentaje de descuento : " + descuentoUtilizado.getPorcentajeDeDescuento() + "\n" +
-                    "Duracion del Viaje : "+ duracionDelViaje);
+                    "Cupon del mes: " + cuponDelMes() + "\n" +
+                    "Duracion del viaje en minutos : "+ duracionDelViaje);
         }else{
             System.out.println ("Tipo de factura : " + tipoDeFactura + "\n" +
                     "Precio de la multa : " + costoDelViaje);
+        }
+    }
+
+    public String cuponDelMes(){
+        if (seUtilizoCuponDelMes){
+            return "Se utilizo un cupon del mes";
+        }else{
+            return "No se utilizo cupon del mes";
         }
     }
 }

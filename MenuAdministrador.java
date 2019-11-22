@@ -13,7 +13,13 @@ public class MenuAdministrador {
         }
         for (Cliente usuario: MenuDeInicio.clientesRepositorio.listar()) {
             if (usuario.getNumeroDeTelefono() == usuarioBloquear){
+                if (usuario.getActivoAlquilado() != null){
+                    usuario.getActivoAlquilado().cambiarEstadoANoAlquilado();
+                    usuario.borrarActivoAlquilado();
+                    System.out.println("El activo alquilado por el usuario ha sido devuelto a su terminal de origen");
+                }
                 InicioDeSesionAdministrador.administradorIniciado.bloquearUsuario(usuario);
+                System.out.println("El usuario ha sido bloqueado");
                 break;
             }else{
                 System.out.println("No hay usuario asociado al telefono ingresado");
@@ -30,6 +36,7 @@ public class MenuAdministrador {
         for (Cliente usuario: MenuDeInicio.clientesRepositorio.listar()) {
             if (usuario.getNumeroDeTelefono() == usuarioDesbloquear){
                 InicioDeSesionAdministrador.administradorIniciado.desbloquearUsuario(usuario);
+                System.out.println("El usuario ha sido desbloqueado");
                 break;
             }else{
                 System.out.println("No hay usuario asociado al telefono ingresado");
@@ -76,14 +83,16 @@ public class MenuAdministrador {
         }
         int terminalSeleccionada = prog2.TP.Scanner.getInt("Seleccionar terminal : ");
 
-        if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() == 0){
-            System.out.println("No hay activos en el sistema");
-        }
+
         for (int i = 0; i <MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() ; i++) {
             System.out.println(i + ")" + MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(i).getTipoDeActivo().getNombreDelActivo());
             if (i == MenuDeInicio.activosRepositorio.listarActivosDiferentes().size()-1){
                 System.out.println(++i + ")Crear activo");
             }
+        }
+
+        if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() == 0){
+            System.out.println("No hay activos en el sistema");
         }
         int tipoDeActivoIngresado = prog2.TP.Scanner.getInt("Seleccione el activo que desea comprar : ");
 
@@ -103,7 +112,7 @@ public class MenuAdministrador {
 
         int cantidadDeActivos = prog2.TP.Scanner.getInt("Ingresar cantidad de activos a comprar : ");
 
-        LoteDeCompra nuevoLoteDeCompra = InicioDeSesionAdministrador.administradorIniciado.crearLoteDeCompra(MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(tipoDeActivoIngresado).getTipoDeActivo(), MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), MenuDeInicio.zonasRepositorio.listarTerminales().get(terminalSeleccionada),cantidadDeActivos);
+        LoteDeCompra nuevoLoteDeCompra = InicioDeSesionAdministrador.administradorIniciado.crearLoteDeCompra(MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(tipoDeActivoIngresado).getTipoDeActivo(), MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada), MenuDeInicio.zonasRepositorio.listarTerminales(MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada)).get(terminalSeleccionada),cantidadDeActivos);
         for (Activo activo : nuevoLoteDeCompra.getLoteDeCompra() ) {
             MenuDeInicio.activosRepositorio.agregar(activo);
         }
@@ -165,7 +174,7 @@ public class MenuAdministrador {
         }
         int zonaSeleccionada = Scanner.getInt("Seleccionar zona : ");
         if(MenuDeInicio.tablasDePuntaje.size() == 0){
-            System.out.println("No hay usuarios en la zona seleccionada");
+            System.out.println("No hay tablas en la zona seleccionada");
             return;
         }
         for (TablaDePuntaje tablaDePuntaje: MenuDeInicio.tablasDePuntaje) {
@@ -183,7 +192,9 @@ public class MenuAdministrador {
         }
         for (TablaDePuntaje tablaDePuntaje: MenuDeInicio.tablasDePuntaje) {
             tablaDePuntaje.entregarCuponDeDescuento();
+
         }
+        System.out.println("Los cupones se han entregado exitosamente");
     }
 
     public void reiniciarPuntos(){
@@ -199,15 +210,21 @@ public class MenuAdministrador {
         if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() == 0){
             System.out.println("No hay activos en el sistema");
         }
+        for (int i = 0; i < MenuDeInicio.zonasRepositorio.listar().size(); i++) {
+            System.out.println(i + ") " + MenuDeInicio.zonasRepositorio.listar().get(i).getNombreZona());
+        }
+        int zonaSeleccionada = Scanner.getInt("Seleccione una zona : ");
+
         for (int i = 0; i <MenuDeInicio.activosRepositorio.listarActivosDiferentes().size() ; i++) {
             System.out.println(i + ")" + MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(i).getTipoDeActivo().getNombreDelActivo());
         }
-        int seleccionarActivo = Scanner.getInt("Seleccionar un activo : ");
+        int activoSeleccionado = Scanner.getInt("Seleccionar un activo : ");
+
         int puntosRequeridosDescuento = Scanner.getInt("Ingresar puntos requeridos para aplicar al descuento : ");
         int porcentajeDelDescuento = Scanner.getInt("Ingresar porcentaje del descuento : ");
         Descuento nuevoDescuento = new Descuento(puntosRequeridosDescuento,porcentajeDelDescuento);
         for (Activo activo : MenuDeInicio.activosRepositorio.listar()) {
-            if (MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(seleccionarActivo).getTipoDeActivo().getNombreDelActivo().equals(activo.getTipoDeActivo().getNombreDelActivo())){
+            if (activo.getTipoDeActivo().getNombreDelActivo().equals(MenuDeInicio.activosRepositorio.listarActivosDiferentes().get(activoSeleccionado).getTipoDeActivo().getNombreDelActivo()) && activo.getZona().getNombreZona().equals(MenuDeInicio.zonasRepositorio.listar().get(zonaSeleccionada).getNombreZona())){
                 activo.agregarDescuento(nuevoDescuento);
             }
         }

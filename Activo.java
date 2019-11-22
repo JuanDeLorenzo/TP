@@ -8,7 +8,7 @@ public class Activo {
     private boolean estaAlquilado;
     private ArrayList<Descuento> descuentos;
     private Viaje viaje;
-    private final int id;
+    private int id;
     private int codigoIncremental = 1;
     private Terminal terminalActual;
     private LoteDeCompra loteDeCompra;
@@ -18,10 +18,10 @@ public class Activo {
         this.tipoDeActivo = tipoDeActivo;
         this.zona = zona;
         this.estaAlquilado = false;
+        this.terminalActual = null;
         descuentos = new ArrayList<>();
         id = codigoIncremental;
         codigoIncremental++;
-
     }
 
     public ArrayList<Descuento> getDescuentos() {
@@ -44,8 +44,8 @@ public class Activo {
         return terminalActual;
     }
 
-    public void setTerminalActual(Terminal terminalDeActual) {
-        this.terminalActual = terminalDeActual;
+    public void setTerminalActual(Terminal terminalActual) {
+        this.terminalActual = terminalActual;
     }
 
     public Viaje getViaje() {
@@ -77,6 +77,6 @@ public class Activo {
     }
 
     public String toString(){
-        return tipoDeActivo.getNombreDelActivo()+ " " + id;
+        return tipoDeActivo.getNombreDelActivo();
     }
 }

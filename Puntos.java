@@ -16,6 +16,10 @@ public class Puntos {
         this.puntosTotales += puntos.getPuntosTotales();
     }
 
+    public void restarPuntos(int puntos){
+        puntosParaDescuento -= puntos;
+    }
+
     public void sumarPuntosParaDescuento(int puntosParaDescuento){
         this.puntosParaDescuento += puntosParaDescuento;
     }

@@ -1,6 +1,7 @@
 package prog2.TP;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ActivosRepositorio implements Repositorio<Activo> {
@@ -39,20 +40,23 @@ public class ActivosRepositorio implements Repositorio<Activo> {
         return repositorioActivos;
     }
 
-    public ArrayList<Activo> listarActivosDiferentes(){ //
+    public ArrayList<Activo> listarActivosDiferentes(){
         ArrayList<Activo> activosDiferentes = new ArrayList<>();
-        for (Activo activo: repositorioActivos) {
+        for (int i = 0; i < repositorioActivos.size(); i++) {
             if (activosDiferentes.size() == 0){
-                activosDiferentes.add(activo);
+                activosDiferentes.add(repositorioActivos.get(i));
             }else{
-                for (int i = 0; i < activosDiferentes.size(); ++i) {
-                    if (!activo.getTipoDeActivo().getNombreDelActivo().equals(activosDiferentes.get(i).getTipoDeActivo().getNombreDelActivo())){
-                        activosDiferentes.add(activo);
+                boolean condicion = true;
+                for (int j = 0; j < activosDiferentes.size(); j++) {
+                    if (repositorioActivos.get(i).getTipoDeActivo().getNombreDelActivo().equals(activosDiferentes.get(j).getTipoDeActivo().getNombreDelActivo()) ){
+                        condicion = false;
                         break;
                     }
                 }
+                if (condicion){
+                    activosDiferentes.add(repositorioActivos.get(i));
+                }
             }
-
         }
         return activosDiferentes;
     }

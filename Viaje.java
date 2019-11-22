@@ -1,10 +1,9 @@
 package prog2.TP;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Viaje {
-    private int tiempoDeEntrega;
+    private Tiempo tiempoDeEntrega;
     private int duracionDelViaje;
     private Terminal terminalDeSalida;
     private Terminal terminalDeEntrega;
@@ -12,11 +11,12 @@ public class Viaje {
     private Puntos puntosOtorgar;
     private Zona zona;
     private int costoDelViaje;
-    private int tiempoDeEntregaEstimado;
+    private Tiempo tiempoDeEntregaEstimado;
     private Descuento descuentoUtilizado;
+    private boolean seUtilizoCuponDelMes;
 
 
-    public Viaje(Activo activoUsado, int tiempoDeEntregaEstimado) {
+    public Viaje(Activo activoUsado, Tiempo tiempoDeEntregaEstimado) {
         this.activoUsado = activoUsado;
         this.terminalDeSalida = activoUsado.getTerminalActual();
         this.zona = activoUsado.getZona();
@@ -24,7 +24,7 @@ public class Viaje {
         activoUsado.cambiarEstadoAAlquilado();
     }
 
-    public void finDelViaje(Terminal terminalDeEntrega, int puntos, int duracionDelViaje, int tiempoDeEntrega){
+        public void finDelViaje(Terminal terminalDeEntrega, int puntos, int duracionDelViaje, Tiempo tiempoDeEntrega){
         terminalEntrega(terminalDeEntrega);
         this.duracionDelViaje = duracionDelViaje;
         this.tiempoDeEntrega = tiempoDeEntrega;
@@ -36,6 +36,7 @@ public class Viaje {
         puntosOtorgar = puntosParaUsuario;
         this.costoDelViaje = costoDelViaje;
         activoUsado.setTerminalActual(terminalDeEntrega);
+        activoUsado.cambiarEstadoANoAlquilado();
     }
 
     public void terminalEntrega(Terminal terminalDeEntrega){
@@ -43,12 +44,13 @@ public class Viaje {
             throw new RuntimeException("La terminal no coincide con la zona del activo");
         }
         activoUsado.setTerminalActual(terminalDeEntrega);
+        this.terminalDeEntrega = terminalDeEntrega;
     }
 
     public int puntosDeViaje(){
         int puntos = duracionDelViaje * activoUsado.getTipoDeActivo().getPuntosPorMinuto();
-        if (tiempoDeEntrega == tiempoDeEntregaEstimado){
-            return (int) (puntos * 0.2);
+        if (tiempoDeEntrega.compararTiempo(tiempoDeEntregaEstimado)){
+            return (int) (puntos * 1.2);
         }
         return puntos;
     }
@@ -79,7 +81,7 @@ public class Viaje {
 
 
 
-    public int getTiempoDeEntrega() {
+    public Tiempo getTiempoDeEntrega() {
         return tiempoDeEntrega;
     }
 
@@ -117,5 +119,17 @@ public class Viaje {
 
     public int getDuracionDelViaje() {
         return duracionDelViaje;
+    }
+
+    public void siSeUtilizoCuponDelMes() {
+        seUtilizoCuponDelMes = true;
+    }
+
+    public void noSeUtilizoCuponDelMes(){
+        seUtilizoCuponDelMes = false;
+    }
+
+    public boolean isSeUtilizoCuponDelMes() {
+        return seUtilizoCuponDelMes;
     }
 }

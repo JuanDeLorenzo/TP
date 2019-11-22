@@ -6,7 +6,11 @@ public class MenuCliente {
 
 
     public void alquilarActivo(){
-        if (InicioDeSesionCliente.clienteIniciado.isEstaBloqueado() == true){
+        if (InicioDeSesionCliente.clienteIniciado.getActivoAlquilado() != null){
+            System.out.println("Tenes un activo alquilado");
+            return;
+        }
+        if (InicioDeSesionCliente.clienteIniciado.isEstaBloqueado()){
             System.out.println("El usuario esta bloqueado");
             return;
         }
@@ -21,8 +25,11 @@ public class MenuCliente {
 
         ArrayList<Activo> activosCoincidentes = new ArrayList<>();
         for (Activo activo: MenuDeInicio.activosRepositorio.listar()) {
-            if (activo.getZona().getNombreZona().equals(MenuDeInicio.zonasRepositorio.listar().get(zonaUsuario).getNombreZona()) && activo.getTerminalActual().getNombre().equals(MenuDeInicio.zonasRepositorio.listarTerminales(MenuDeInicio.zonasRepositorio.listar().get(zonaUsuario)).get(terminalUsuario).getNombre())) {
-                activosCoincidentes.add(activo);
+            if (activo.getTerminalActual() == null){
+            }else{
+                if (activo.getTerminalActual().getNombre().equals(MenuDeInicio.zonasRepositorio.listarTerminales(MenuDeInicio.zonasRepositorio.listar().get(zonaUsuario)).get(terminalUsuario).getNombre())){
+                    activosCoincidentes.add(activo);
+                }
             }
         }
         if (activosCoincidentes.size() == 0){
@@ -33,21 +40,30 @@ public class MenuCliente {
             }
             int activoSeleccionado = Scanner.getInt("Seleccione activo que desea alquilar : ");
 
-            int horaDeEntregaEstimada = Scanner.getInt("Ingresar hora de entrega estimada");
+            int horaDeEntregaEstimada = Scanner.getInt("Ingresar hora de entrega estimada : ");
+            int minutosEntregaEstimada = Scanner.getInt("Ingresar minuto de entrega estimada : ");
 
-            InicioDeSesionCliente.clienteIniciado.iniciarViaje(MenuDeInicio.activosRepositorio.listar().get(activoSeleccionado), horaDeEntregaEstimada);
+            InicioDeSesionCliente.clienteIniciado.alquilarActivo(activosCoincidentes.get(activoSeleccionado), new Tiempo(horaDeEntregaEstimada, minutosEntregaEstimada));
+            System.out.println("El activo ha sido alquilado exitosamente\n");
         }
     }
 
     public void entregarActivo(){
+        if (InicioDeSesionCliente.clienteIniciado.getActivoAlquilado() == null){
+            System.out.println("No tenes un activo alquilado");
+            return;
+        }
         for (int i = 0; i < InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().size() ; i++) {
             System.out.println(i + ") " + InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(i).getNombre());
         }
         int terminalSeleccionada = Scanner.getInt("Seleccione terminal de entrega del activo : ");
-        int duracionDelViaje = Scanner.getInt("Ingrese duracion del viaje : ");
-        int horaDeEntrega = Scanner.getInt("Ingrese hora en la que esta entregando el activo : ");
+        int duracionDelViaje = Scanner.getInt("Ingrese duracion del viaje en minutos : ");
+        int horaDeEntrega = Scanner.getInt("Ingrese hora en la cual se entregue el activo : ");
+        int minutoDeEntrega = Scanner.getInt("Ingrese minuto en el cual se entregue el activo : ");
 
-        InicioDeSesionCliente.clienteIniciado.entregaActivo(InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(terminalSeleccionada), duracionDelViaje, horaDeEntrega);
+
+        InicioDeSesionCliente.clienteIniciado.entregaActivo(InicioDeSesionCliente.clienteIniciado.getActivoAlquilado().getZona().getTerminales().get(terminalSeleccionada), duracionDelViaje, new Tiempo(horaDeEntrega,minutoDeEntrega));
+        System.out.println("El activo ha sido entregado exitosamente");
     }
 
     public void verTablaDePuntajes(){
